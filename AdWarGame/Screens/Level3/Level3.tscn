@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Assets/tiles/indoorTileSet.tres" type="TileSet" id=1]
-[ext_resource path="res://Assets/characters/REVISED PNGS/twohandedbot.png" type="Texture" id=2]
-[ext_resource path="res://Assets/characters/REVISED PNGS/robot.png" type="Texture" id=3]
+[ext_resource path="res://Assets/characters/Revised/user-smgNEW.png" type="Texture" id=2]
+[ext_resource path="res://Assets/characters/Revised/enemybotNEW.png" type="Texture" id=3]
 
 [node name="Node2D" type="Node2D"]
 
@@ -17,6 +17,8 @@ tile_data = PoolIntArray( -2228224, 536870929, 0, -2228223, 20, 0, -2228222, 20,
 position = Vector2( 155, 553 )
 scale = Vector2( 0.235, 0.22175 )
 texture = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Navigation2D/Sprite"]
 
 [node name="Sprite2" type="Sprite" parent="Navigation2D"]
 position = Vector2( 522, -1979 )
