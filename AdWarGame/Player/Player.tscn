@@ -50,4 +50,6 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="Tween" type="Tween" parent="."]
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]

@@ -1,17 +1,19 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Enemy/Enemy.gd" type="Script" id=1]
-[ext_resource path="res://Assets/characters/Revised/enemybotNEW.png" type="Texture" id=2]
+[ext_resource path="res://Assets/characters/day2images/bossmodel.png" type="Texture" id=2]
 
-[sub_resource type="CircleShape2D" id=1]
-radius = 35.0
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 60, 40 )
 
-[node name="RifleEnemy" type="KinematicBody2D" groups=["Enemy"]]
-scale = Vector2( 0.7, 0.7 )
+[node name="BossEnemy" type="KinematicBody2D" groups=["Enemy"]]
+scale = Vector2( 1.5, 1.5 )
 collision_layer = 4
 collision_mask = 3
 script = ExtResource( 1 )
-weapon_file = "rifle"
+weapon_file = "boss_weapon"
+health = 200
+WANDER_DIST = 0
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( -2.38419e-07, -11.4286 )

@@ -1,7 +1,7 @@
 extends Area2D
 
 var direction : Vector2 = Vector2.ZERO # default direction
-var speed : float = 200 #put your rocket speed
+var speed : float = 400 #put your rocket speed
 var damage = 0;
 
 func init(gun_damage, currentPos : Vector2, fromPos : Vector2, toPos : Vector2):

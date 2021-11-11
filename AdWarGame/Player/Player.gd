@@ -34,7 +34,7 @@ func _on_shoot():
 	weapon_timer.start()
 
 func shoot(mouse_pos):
-	weapon.fire(get_tree().get_root(), player_bullet, global_position, mouse_pos)
+	weapon.fire(self, get_tree().get_root(), player_bullet, global_position, mouse_pos)
 	weapon_ready = false
 
 func _physics_process(delta):
@@ -56,6 +56,19 @@ func _physics_process(delta):
 func take_damage(damage):
 	health = max(health - damage, 0)
 	emit_signal("player_take_dmg", health, damage)
+	if (health > 0):
+		var speech_player = AudioStreamPlayer.new()
+		var audio_file = "res://Assets/sound_effects/UserHit.wav"
+		if File.new().file_exists(audio_file):
+			var sfx = load(audio_file) 
+			speech_player.stream = sfx
+			add_child(speech_player)
+			speech_player.connect("finished", speech_player, "queue_free")
+			speech_player.play()
+		$Tween.interpolate_property($Sprite, "modulate", 
+			Color(1,.5,.5,.8), Color(1, 1, 1, 1) , .5, 
+			Tween.TRANS_LINEAR, Tween.EASE_IN)
+		$Tween.start()
 	# if health == 0: goto scene death
 	
 func _on_Area2D_body_entered(body):

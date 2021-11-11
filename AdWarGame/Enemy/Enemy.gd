@@ -2,9 +2,9 @@ extends KinematicBody2D
 
 export(int) var SPEED: int = 200
 export var enemy_bullet = preload("res://Bullet/EnemyBullet.tscn")
-export(String, "shotgun", "rifle", "smg") onready var weapon_file
+export(String, "shotgun", "rifle", "smg", "boss_weapon") onready var weapon_file
 
-var health = 100
+export var health = 100
 var space_state = null
 
 var velocity: Vector2 = Vector2.ZERO
@@ -12,13 +12,12 @@ var velocity: Vector2 = Vector2.ZERO
 var path: Array = []	# Contains destination positions
 var levelNavigation: Navigation2D = null
 var player = null
-var player_spotted: bool = false
 
 var idle_wander_timer = null
 var seek_timer = null
 var weapon_timer = null
 
-const WANDER_DIST = 64
+export var WANDER_DIST = 64
 const SEEK_TIME = 1
 const SHOOT_DISTANCE = 500
 const IDLE_WANDER_TIME = 2
@@ -30,13 +29,13 @@ var current_state = STATE.IDLE
 var weapon_dict = {
 	"shotgun" : preload("res://Weapons/Shotgun.gd"),
 	"rifle" : preload("res://Weapons/Rifle.gd"),
-	"smg" : preload("res://Weapons/SMG.gd")
+	"smg" : preload("res://Weapons/SMG.gd"),
+	"boss_weapon" : preload("res://Weapons/BossWeapon.gd")
 }
 
 var weapon = null
 var track_player = false
 var isIdle = false
-
 
 func _ready():
 	yield(get_tree(), "idle_frame")
@@ -49,6 +48,7 @@ func _ready():
 	space_state = get_world_2d().direct_space_state
 	
 	weapon = weapon_dict[weapon_file].new()
+	weapon.init(self)
 	
 	seek_timer =  Timer.new()
 	seek_timer.connect("timeout",self,"_on_seek") 
@@ -66,6 +66,9 @@ func _ready():
 	weapon_timer.set_wait_time(weapon.SHOOT_TIME)
 	
 	idle_wander_timer.start()
+
+func set_weapon_time(time):
+	weapon_timer.set_wait_time(time)
 
 func _on_idle_wander():
 	if (!isIdle):
@@ -98,7 +101,7 @@ func _physics_process(delta):
 		if(result["collider"] == player):
 			player_spotted()
 			track_player = false
-	
+			
 	match(current_state):
 		STATE.IDLE:
 			pass
@@ -118,7 +121,7 @@ func _physics_process(delta):
 			global_rotation = direction.angle() + PI / 2.0
 
 func shoot():
-	weapon.fire(get_tree().get_root(), enemy_bullet, global_position, player.global_position)
+	weapon.fire(self, get_tree().get_root(), enemy_bullet, global_position, player.global_position)
 
 func player_spotted():
 	switch_state(STATE.SEEK)
@@ -146,7 +149,7 @@ func switch_state(new_state : int):
 			generate_path_to_player()
 			seek_timer.start()
 		STATE.SHOOT:
-			shoot()
+			#shoot()
 			weapon_timer.start()
 	
 	match (current_state):
@@ -193,6 +196,22 @@ func move():
 
 func take_damage(damage):
 	health = max(health - damage, 0)
-	switch_state(STATE.SEEK)
+	if (current_state != STATE.SEEK and current_state != STATE.SHOOT):
+		switch_state(STATE.SEEK)
+		
 	if(health == 0):
 		queue_free()
+	else:
+		var speech_player = AudioStreamPlayer.new()
+		var audio_file = "res://Assets/sound_effects/EnemyHit.wav"
+		if File.new().file_exists(audio_file):
+			var sfx = load(audio_file) 
+			speech_player.stream = sfx
+			add_child(speech_player)
+			speech_player.connect("finished", speech_player, "queue_free")
+			speech_player.play()
+			
+		$Tween.interpolate_property($Sprite, "modulate", 
+		  Color(1,.5,.5,.8), Color(1, 1, 1, 1) , .5, 
+		  Tween.TRANS_LINEAR, Tween.EASE_IN)
+		$Tween.start()

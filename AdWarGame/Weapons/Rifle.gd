@@ -3,7 +3,19 @@ extends Node
 const SHOOT_TIME = .5
 const DAMAGE = 10
 
-func fire(scene, bullet_type, your_position, their_position):
+func init(you):
+	pass
+
+func fire(you, scene, bullet_type, your_position, their_position):
 	var b = bullet_type.instance()
 	b.init(DAMAGE, your_position, your_position, their_position)
 	scene.add_child(b)
+	
+	var speech_player = AudioStreamPlayer.new()
+	var audio_file = "res://Assets/sound_effects/UserRifle.wav"
+	if File.new().file_exists(audio_file):
+		var sfx = load(audio_file) 
+		speech_player.stream = sfx
+		you.add_child(speech_player)
+		speech_player.connect("finished", speech_player, "queue_free")
+		speech_player.play()
