@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Metroid (NES) Music - Brinstar Theme.mp3-4b28f5fce00e6968141d738fcd046332.mp3str"
+
+[deps]
+
+source_file="res://Assets/adWarMusic/Metroid (NES) Music - Brinstar Theme.mp3"
+dest_files=[ "res://.import/Metroid (NES) Music - Brinstar Theme.mp3-4b28f5fce00e6968141d738fcd046332.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
