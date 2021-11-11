@@ -13,11 +13,13 @@ func init(gun_damage, currentPos : Vector2, fromPos : Vector2, toPos : Vector2):
 func _process(delta):
 	translate(direction*speed*delta)
 
-
 func _on_Bullet_body_entered(body):
-	var tree = get_tree()
-	if tree.has_group("Player"):
-		var player = tree.get_nodes_in_group("Player")[0]
-		if (body == player):
-			player.take_damage(damage)
+	if(body.has_method("take_damage")):
+		body.take_damage(damage)
+	queue_free()
+
+func _on_EnemyBullet_area_entered(_area):
+	queue_free() # Replace with function body.
+
+func _on_PlayerBullet_area_entered(_area):
 	queue_free()

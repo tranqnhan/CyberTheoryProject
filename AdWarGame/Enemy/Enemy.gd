@@ -1,8 +1,10 @@
 extends KinematicBody2D
 
-export(int) var SPEED: int = 100
-export var bullet = preload("res://Bullet/Bullet.tscn")
+export(int) var SPEED: int = 200
+export var enemy_bullet = preload("res://Bullet/EnemyBullet.tscn")
+export(String, "shotgun", "rifle", "smg") onready var weapon_file
 
+var health = 100
 var space_state = null
 
 var velocity: Vector2 = Vector2.ZERO
@@ -23,19 +25,18 @@ const IDLE_WANDER_TIME = 2
 
 enum STATE {IDLE, WANDER, SEEK, SHOOT}
 
-const RIFLE_SHOOT_TIME = .5
-const SHOTGUN_SHOOT_TIME = 1
-const SMG_SHOOT_TIME = .2
-enum WEAPON_TYPE {SHOTGUN, RIFLE, SMG}
-
-var SHOTGUN_BULLET_SPR = PI / 24
-const SHOTGUN_BULLET_NUM = 4
-
 var current_state = STATE.IDLE
-var current_weapon = WEAPON_TYPE.SHOTGUN
-var current_weapon_time = SHOTGUN_SHOOT_TIME
 
+var weapon_dict = {
+	"shotgun" : preload("res://Weapons/Shotgun.gd"),
+	"rifle" : preload("res://Weapons/Rifle.gd"),
+	"smg" : preload("res://Weapons/SMG.gd")
+}
+
+var weapon = null
+var track_player = false
 var isIdle = false
+
 
 func _ready():
 	yield(get_tree(), "idle_frame")
@@ -46,6 +47,8 @@ func _ready():
 		player = tree.get_nodes_in_group("Player")[0]
 	
 	space_state = get_world_2d().direct_space_state
+	
+	weapon = weapon_dict[weapon_file].new()
 	
 	seek_timer =  Timer.new()
 	seek_timer.connect("timeout",self,"_on_seek") 
@@ -60,7 +63,7 @@ func _ready():
 	weapon_timer =  Timer.new()
 	weapon_timer.connect("timeout",self,"_on_shoot") 
 	add_child(weapon_timer)
-	weapon_timer.set_wait_time(current_weapon_time)
+	weapon_timer.set_wait_time(weapon.SHOOT_TIME)
 	
 	idle_wander_timer.start()
 
@@ -89,6 +92,13 @@ func _on_shoot():
 		switch_state(STATE.SEEK)
 
 func _physics_process(delta):
+	
+	if (track_player):
+		var result = space_state.intersect_ray(global_position, player.global_position, [self])
+		if(result["collider"] == player):
+			player_spotted()
+			track_player = false
+	
 	match(current_state):
 		STATE.IDLE:
 			pass
@@ -104,31 +114,11 @@ func _physics_process(delta):
 				if(navigate()):
 					move()
 		STATE.SHOOT:
-			pass
+			var direction = (player.global_position - global_position).normalized()
+			global_rotation = direction.angle() + PI / 2.0
 
 func shoot():
-	var direction = (player.global_position - global_position).normalized()
-	global_rotation = direction.angle() + PI / 2.0
-	match (current_weapon):
-		WEAPON_TYPE.RIFLE:
-			var b = bullet.instance()
-			b.init(10, global_position, global_position, player.global_position)
-			get_tree().get_root().add_child(b)
-			
-		WEAPON_TYPE.SMG:
-			var b = bullet.instance()
-			b.init(5, global_position, global_position, player.global_position)
-			get_tree().get_root().add_child(b)
-
-		WEAPON_TYPE.SHOTGUN:
-			for i in range(SHOTGUN_BULLET_NUM):
-				var shotspr = rand_range(SHOTGUN_BULLET_SPR - PI / 24, SHOTGUN_BULLET_SPR + PI / 24)
-				var startRadians = (shotspr / 2) * (SHOTGUN_BULLET_NUM - 1);
-				var startPoint = rotate_around_point(global_position, player.global_position, startRadians);
-				var nextPoint = rotate_around_point(global_position, startPoint, -shotspr * i);
-				var b = bullet.instance()
-				b.init(10, global_position, global_position, nextPoint)
-				get_tree().get_root().add_child(b)
+	weapon.fire(get_tree().get_root(), enemy_bullet, global_position, player.global_position)
 
 func player_spotted():
 	switch_state(STATE.SEEK)
@@ -141,6 +131,10 @@ func rotate_around_point(origin : Vector2, point : Vector2, angle):
 	var qx = ox + cos(angle) * (px - ox) - sin(angle) * (py - oy);
 	var qy = oy + sin(angle) * (px - ox) + cos(angle) * (py - oy);
 	return Vector2(qx, qy)
+
+func track_player():
+	if (current_state == STATE.IDLE or current_state == STATE.WANDER):
+		track_player = true
 
 func switch_state(new_state : int):
 	match (new_state):
@@ -196,3 +190,9 @@ func generate_path_to_player(): # It's obvious
 
 func move():
 	velocity = move_and_slide(velocity)
+
+func take_damage(damage):
+	health = max(health - damage, 0)
+	switch_state(STATE.SEEK)
+	if(health == 0):
+		queue_free()
