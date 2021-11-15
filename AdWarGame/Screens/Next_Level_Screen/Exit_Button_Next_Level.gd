@@ -12,7 +12,7 @@ func _ready():
 
 
 func _button_pressed():
-	get_tree().change_scene(stri)
+	get_tree().change_scene(path)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

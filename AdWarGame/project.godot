@@ -14,6 +14,10 @@ config/name="Ad War Game"
 run/main_scene="res://Screens/Menu/Menu.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Global="*res://global.gd"
+
 [global]
 
 size=false

@@ -1,4 +1,4 @@
-extends Button
+extends Node2D
 
 
 # Declare member variables here. Examples:
@@ -8,13 +8,8 @@ extends Button
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	connect("pressed", self, "_button_pressed")
-
-
-func _button_pressed():
-	var stri = "res://Screens/Level3/Level3.tscn"
-	get_tree().change_scene(stri)
-
+	Global.currentLevel = 1
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
