@@ -75,7 +75,7 @@ func take_damage(damage):
 			Tween.TRANS_LINEAR, Tween.EASE_IN)
 		$Tween.start()
 	
-	if (!is_ad_open and rand_range(0, 1) < 0.2):
+	if (!is_ad_open and rand_range(0, 1) < 0.15):
 		open_ad()
 	
 	if health == 0: 
