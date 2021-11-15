@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Assets/tiles/indoorTileSet.tres" type="TileSet" id=1]
 [ext_resource path="res://Enemy/RifleEnemy.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Enemy/SMGEnemy.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Screens/Level3/Level3.gd" type="Script" id=7]
 [ext_resource path="res://Enemy/BossEnemy.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Assets/adWarMusic/Metroid (NES) Music - Brinstar Theme.mp3" type="AudioStream" id=9]
 
 [node name="Level3" type="Node2D"]
 script = ExtResource( 7 )
@@ -38,7 +39,7 @@ position = Vector2( 427, -498 )
 position = Vector2( 517, -1938 )
 
 [node name="SMGEnemy" parent="." instance=ExtResource( 6 )]
-position = Vector2( 167, -1181 )
+position = Vector2( 158, -1383 )
 
 [node name="RifleEnemy2" parent="." instance=ExtResource( 2 )]
 position = Vector2( 876, 482 )
@@ -52,6 +53,14 @@ position = Vector2( 546, -791 )
 [node name="SMGEnemy2" parent="." instance=ExtResource( 6 )]
 position = Vector2( 868, -139 )
 
+[node name="RifleEnemy4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 164, 155 )
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HUD" parent="CanvasLayer" instance=ExtResource( 4 )]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+volume_db = 0.874
+autoplay = true
