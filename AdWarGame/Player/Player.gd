@@ -74,10 +74,10 @@ func take_damage(damage):
 			Color(1,.5,.5,.8), Color(1, 1, 1, 1) , .5, 
 			Tween.TRANS_LINEAR, Tween.EASE_IN)
 		$Tween.start()
-    
-    if (!is_ad_open and rand_range(0, 1) < 0.1):
-	    open_ad()
-    
+	
+	if (!is_ad_open and rand_range(0, 1) < 0.2):
+		open_ad()
+	
 	if health == 0: 
 		get_tree().change_scene("res://Screens/Defeat_Screen/Defeat.tscn")
 		
