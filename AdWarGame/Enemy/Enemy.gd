@@ -68,6 +68,39 @@ func _ready():
 	
 	idle_wander_timer.start()
 
+func draw_l(epoint1, epoint2, result1, result2):
+	var dl1 : Line2D = get_tree().get_current_scene().get_node("Ray1")
+	var dl2 : Line2D = get_tree().get_current_scene().get_node("Ray2")
+	
+	dl1.clear_points()
+	dl2.clear_points()
+	dl1.add_point(global_position + epoint1)
+	dl1.add_point(result1["position"])
+	dl2.add_point(global_position + epoint2)
+	dl2.add_point(result2["position"])
+
+func cast_ray():
+	var spr = 10
+
+	var e2p_dist = (global_position - player.global_position).normalized() 
+	var p2e_dist = (player.global_position - global_position).normalized()
+	
+	var ppoint1 = Vector2(p2e_dist.y, -p2e_dist.x).normalized() * spr
+	var epoint1 = Vector2(e2p_dist.y, -e2p_dist.x).normalized() * spr
+	
+	var ppoint2 = Vector2(-p2e_dist.y, p2e_dist.x).normalized() * spr
+	var epoint2 = Vector2(-e2p_dist.y, e2p_dist.x).normalized() * spr
+
+	return {
+		"r1e" : global_position + epoint1,
+		"r2p" : player.global_position + ppoint1,
+		"r2e" : global_position + epoint2,
+		"r1p" : player.global_position + ppoint2,
+		"e1" : epoint1,
+		"e2" : epoint2 
+	}
+
+
 func set_weapon_time(time):
 	weapon_timer.set_wait_time(time)
 
@@ -86,20 +119,13 @@ func _on_seek():
 	seek_timer.start()
 
 func _on_shoot():
-	#draw_l()
 	if (global_position.distance_to(player.global_position) < SHOOT_DISTANCE):
-		var spr = 20
+		var vector_pos = cast_ray()
 		
-		var line1 = to_local(player.global_position)
-		var line2 = (player.global_position - global_position).normalized()
+		var result1 = space_state.intersect_ray(vector_pos["r1e"], vector_pos["r1p"], [self])
+		var result2 = space_state.intersect_ray(vector_pos["r2e"], vector_pos["r2p"], [self])
 		
-		var ppoint1 = Vector2(line2.y, -line2.x).normalized() * spr
-		var epoint1 = Vector2(line1.y, -line1.x).normalized() * spr
-		var epoint2 = Vector2(-line1.y, line1.x).normalized() * spr
-		var ppoint2 = Vector2(-line2.y, line2.x).normalized() * spr
-		
-		var result1 = space_state.intersect_ray(global_position + epoint1, player.global_position + ppoint1, [self])
-		var result2 = space_state.intersect_ray(global_position + epoint2, player.global_position + ppoint2, [self])
+		#draw_l(vector_pos["e1"], vector_pos["e2"], result1, result2)
 		
 		if(result1["collider"] == player and result2["collider"] == player):
 			shoot()
@@ -107,30 +133,8 @@ func _on_shoot():
 			switch_state(STATE.SEEK)
 	else:
 		switch_state(STATE.SEEK)
-
-func draw_l():
-	if (player != null):
 		
-		var spr = 10
-		
-		var line1 = to_local(player.global_position)
-		var line2 = (player.global_position - global_position).normalized()
-		
-		var ppoint1 = Vector2(line2.y, -line2.x).normalized() * spr
-		var epoint1 = Vector2(line1.y, -line1.x).normalized() * spr
-		var epoint2 = Vector2(-line1.y, line1.x).normalized() * spr
-		var ppoint2 = Vector2(-line2.y, line2.x).normalized() * spr
-		
-		#$Line2D.clear_points()
-		#$Line2D2.clear_points()
-		
-		#$Line2D.add_point(epoint1)
-		#$Line2D.add_point(to_local(player.global_position + ppoint1))
-		#$Line2D2.add_point(epoint2)
-		#$Line2D2.add_point(to_local(player.global_position + ppoint2))
-
 func _physics_process(delta):
-
 	if (track_player):
 		var result = space_state.intersect_ray(global_position, player.global_position, [self])
 		if(result["collider"] == player):
@@ -144,19 +148,12 @@ func _physics_process(delta):
 			if(navigate()):
 				move()
 		STATE.SEEK:
-			#draw_l()
-			var spr = 20
-		
-			var line1 = to_local(player.global_position)
-			var line2 = (player.global_position - global_position).normalized()
+			var vector_pos = cast_ray()
 			
-			var ppoint1 = Vector2(line2.y, -line2.x).normalized() * spr
-			var epoint1 = Vector2(line1.y, -line1.x).normalized() * spr
-			var epoint2 = Vector2(-line1.y, line1.x).normalized() * spr
-			var ppoint2 = Vector2(-line2.y, line2.x).normalized() * spr
+			var result1 = space_state.intersect_ray(vector_pos["r1e"], vector_pos["r1p"], [self])
+			var result2 = space_state.intersect_ray(vector_pos["r2e"], vector_pos["r2p"], [self])
 			
-			var result1 = space_state.intersect_ray(global_position + epoint1, player.global_position + ppoint1, [self])
-			var result2 = space_state.intersect_ray(global_position + epoint2, player.global_position + ppoint2, [self])
+			#draw_l(vector_pos["e1"], vector_pos["e2"], result1, result2)
 			
 			if (global_position.distance_to(player.global_position) < SHOOT_DISTANCE
 				and result1["collider"] == player and result2["collider"] == player):
@@ -197,7 +194,7 @@ func switch_state(new_state : int):
 			generate_path_to_player()
 			seek_timer.start()
 		STATE.SHOOT:
-			#shoot()
+			shoot()
 			weapon_timer.start()
 	
 	match (current_state):

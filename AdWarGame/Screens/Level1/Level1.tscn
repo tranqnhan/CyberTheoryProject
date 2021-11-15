@@ -61,3 +61,7 @@ autoplay = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="HUD" parent="CanvasLayer" instance=ExtResource( 6 )]
+
+[node name="Ray1" type="Line2D" parent="."]
+
+[node name="Ray2" type="Line2D" parent="."]
