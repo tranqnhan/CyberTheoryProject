@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Screens/StoryBegin/continue_Button.gd" type="Script" id=1]
+[ext_resource path="res://Screens/StoryBegin/StoryBeginScene1.PNG" type="Texture" id=2]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -2.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StoryBeginScene1" type="Sprite" parent="."]
+position = Vector2( 513, 302 )
+texture = ExtResource( 2 )
+
+[node name="Button" type="Button" parent="."]
+margin_left = 281.0
+margin_top = 432.0
+margin_right = 740.0
+margin_bottom = 510.0
+flat = true
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

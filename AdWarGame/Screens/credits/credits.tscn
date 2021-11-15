@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Screens/How_To_Play/Back_Button.gd" type="Script" id=1]
+[ext_resource path="res://Screens/credits/creaditsScene.PNG" type="Texture" id=2]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 497, 300 )
+scale = Vector2( 1.00235, 0.9375 )
+texture = ExtResource( 2 )
+
+[node name="Button" type="Button" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 304.0
+margin_top = 530.0
+margin_right = 686.0
+margin_bottom = 584.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
