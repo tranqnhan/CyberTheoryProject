@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export(int) var SPEED: int = 200
 export var enemy_bullet = preload("res://Bullet/EnemyBullet.tscn")
-export(String, "shotgun", "rifle", "smg", "boss_weapon") onready var weapon_file
+export(String, "shotgun", "rifle", "smg", "boss_weapon", "mini_boss_weapon" ) onready var weapon_file
 
 export var health = 100
 var space_state = null
@@ -30,7 +30,8 @@ var weapon_dict = {
 	"shotgun" : preload("res://Weapons/Shotgun.gd"),
 	"rifle" : preload("res://Weapons/Rifle.gd"),
 	"smg" : preload("res://Weapons/SMG.gd"),
-	"boss_weapon" : preload("res://Weapons/BossWeapon.gd")
+	"boss_weapon" : preload("res://Weapons/BossWeapon.gd"),
+	"mini_boss_weapon" : preload("res://Weapons/MiniBossWeapon.gd")
 }
 
 var weapon = null
@@ -85,17 +86,51 @@ func _on_seek():
 	seek_timer.start()
 
 func _on_shoot():
+	#draw_l()
 	if (global_position.distance_to(player.global_position) < SHOOT_DISTANCE):
-		var result = space_state.intersect_ray(global_position, player.global_position, [self])
-		if(result["collider"] == player):
+		var spr = 20
+		
+		var line1 = to_local(player.global_position)
+		var line2 = (player.global_position - global_position).normalized()
+		
+		var ppoint1 = Vector2(line2.y, -line2.x).normalized() * spr
+		var epoint1 = Vector2(line1.y, -line1.x).normalized() * spr
+		var epoint2 = Vector2(-line1.y, line1.x).normalized() * spr
+		var ppoint2 = Vector2(-line2.y, line2.x).normalized() * spr
+		
+		var result1 = space_state.intersect_ray(global_position + epoint1, player.global_position + ppoint1, [self])
+		var result2 = space_state.intersect_ray(global_position + epoint2, player.global_position + ppoint2, [self])
+		
+		if(result1["collider"] == player and result2["collider"] == player):
 			shoot()
 		else:
 			switch_state(STATE.SEEK)
 	else:
 		switch_state(STATE.SEEK)
 
+func draw_l():
+	if (player != null):
+		
+		var spr = 10
+		
+		var line1 = to_local(player.global_position)
+		var line2 = (player.global_position - global_position).normalized()
+		
+		var ppoint1 = Vector2(line2.y, -line2.x).normalized() * spr
+		var epoint1 = Vector2(line1.y, -line1.x).normalized() * spr
+		var epoint2 = Vector2(-line1.y, line1.x).normalized() * spr
+		var ppoint2 = Vector2(-line2.y, line2.x).normalized() * spr
+		
+		#$Line2D.clear_points()
+		#$Line2D2.clear_points()
+		
+		#$Line2D.add_point(epoint1)
+		#$Line2D.add_point(to_local(player.global_position + ppoint1))
+		#$Line2D2.add_point(epoint2)
+		#$Line2D2.add_point(to_local(player.global_position + ppoint2))
+
 func _physics_process(delta):
-	
+
 	if (track_player):
 		var result = space_state.intersect_ray(global_position, player.global_position, [self])
 		if(result["collider"] == player):
@@ -109,9 +144,22 @@ func _physics_process(delta):
 			if(navigate()):
 				move()
 		STATE.SEEK:
-			var result = space_state.intersect_ray(global_position, player.global_position, [self])
+			#draw_l()
+			var spr = 20
+		
+			var line1 = to_local(player.global_position)
+			var line2 = (player.global_position - global_position).normalized()
+			
+			var ppoint1 = Vector2(line2.y, -line2.x).normalized() * spr
+			var epoint1 = Vector2(line1.y, -line1.x).normalized() * spr
+			var epoint2 = Vector2(-line1.y, line1.x).normalized() * spr
+			var ppoint2 = Vector2(-line2.y, line2.x).normalized() * spr
+			
+			var result1 = space_state.intersect_ray(global_position + epoint1, player.global_position + ppoint1, [self])
+			var result2 = space_state.intersect_ray(global_position + epoint2, player.global_position + ppoint2, [self])
+			
 			if (global_position.distance_to(player.global_position) < SHOOT_DISTANCE
-				and result["collider"] == player):
+				and result1["collider"] == player and result2["collider"] == player):
 				switch_state(STATE.SHOOT)
 			else:
 				if(navigate()):
@@ -182,10 +230,11 @@ func navigate():	# Define the next position to go to
 
 func generate_wander_path():
 	if levelNavigation != null:
-		var target = Vector2(rand_range(-WANDER_DIST, WANDER_DIST), rand_range(-WANDER_DIST, WANDER_DIST))
-		var postar = levelNavigation.get_closest_point(target + position)
-		
-		path = levelNavigation.get_simple_path(global_position, postar, false)
+		if (WANDER_DIST > 0):
+			var target = Vector2(rand_range(-WANDER_DIST, WANDER_DIST), rand_range(-WANDER_DIST, WANDER_DIST))
+			var postar = levelNavigation.get_closest_point(target + position)
+			
+			path = levelNavigation.get_simple_path(global_position, postar, false)
 
 func generate_path_to_player(): # It's obvious
 	if levelNavigation != null and player != null:
