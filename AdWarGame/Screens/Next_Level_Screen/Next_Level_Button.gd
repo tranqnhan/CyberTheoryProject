@@ -5,6 +5,9 @@ extends Button
 # var a = 2
 # var b = "text"
 
+var level1 = "res://Screens/Level1/Level1.tscn"
+var level2 = "res://Screens/Level2/Level2.tscn"
+var level3 = "res://Screens/Level3/Level3.tscn"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -12,7 +15,14 @@ func _ready():
 
 
 func _button_pressed():
-	print("Next Level Button Pressed")
+	Global.currentLevel += 1
+	if(Global.currentLevel == 1):
+		get_tree().change_scene(level1)
+	elif Global.currentLevel == 2 :
+		get_tree().change_scene(level2)
+	elif Global.currentLevel == 3 :
+		get_tree().change_scene(level3)
+	
 
 
 

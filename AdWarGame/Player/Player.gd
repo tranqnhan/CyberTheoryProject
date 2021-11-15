@@ -7,7 +7,7 @@ var ad = preload("res://AdItem/AdItem.tscn")
 export var player_bullet = preload("res://Bullet/PlayerBullet.tscn")
 export var speed = 300
 
-var health = 100
+export var health = 100
 const MAX_HEALTH = 100
 var space_state = null
 
@@ -74,12 +74,13 @@ func take_damage(damage):
 			Color(1,.5,.5,.8), Color(1, 1, 1, 1) , .5, 
 			Tween.TRANS_LINEAR, Tween.EASE_IN)
 		$Tween.start()
+    
+    if (!is_ad_open and rand_range(0, 1) < 0.1):
+	    open_ad()
+    
+	if health == 0: 
+		get_tree().change_scene("res://Screens/Defeat_Screen/Defeat.tscn")
 		
-		if (!is_ad_open and rand_range(0, 1) < 0.1):
-			open_ad()
-		
-	# if health == 0: goto scene death
-
 func open_ad():
 	is_ad_open = true
 	get_parent().get_node("CanvasLayer").add_child(ad.instance())
