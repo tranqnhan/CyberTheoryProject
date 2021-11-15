@@ -1,7 +1,7 @@
 extends Node
 
 const SHOOT_TIME = .05
-const DAMAGE = 0
+const DAMAGE = 5
 
 func init(you):
 	pass
