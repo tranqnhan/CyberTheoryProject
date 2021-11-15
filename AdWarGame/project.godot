@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="Ad War Game"
-run/main_scene="res://Screens/Level1/Level1.tscn"
+run/main_scene="res://Screens/Menu/Menu.tscn"
 config/icon="res://icon.png"
 
 [global]

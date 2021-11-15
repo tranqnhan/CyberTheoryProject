@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Undertale - Papyrus Theme Song - Bonetrousle.mp3-955a6b4631e3cb0d050f45e649579e65.mp3str"
+
+[deps]
+
+source_file="res://Assets/adWarMusic/Undertale - Papyrus Theme Song - Bonetrousle.mp3"
+dest_files=[ "res://.import/Undertale - Papyrus Theme Song - Bonetrousle.mp3-955a6b4631e3cb0d050f45e649579e65.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

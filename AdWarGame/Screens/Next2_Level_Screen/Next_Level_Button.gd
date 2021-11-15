@@ -4,14 +4,17 @@ extends Button
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var stri = "res://Screens/Level1/Level1.tscn"
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	connect("pressed", self, "_button_pressed")
-	
+
+
 func _button_pressed():
+	var stri = "res://Screens/Level3/Level3.tscn"
 	get_tree().change_scene(stri)
+
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

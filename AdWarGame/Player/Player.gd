@@ -5,7 +5,7 @@ signal player_take_dmg(health, damage)
 export var player_bullet = preload("res://Bullet/PlayerBullet.tscn")
 export var speed = 300
 
-var health = 100
+export var health = 100
 const MAX_HEALTH = 100
 var space_state = null
 
@@ -69,7 +69,8 @@ func take_damage(damage):
 			Color(1,.5,.5,.8), Color(1, 1, 1, 1) , .5, 
 			Tween.TRANS_LINEAR, Tween.EASE_IN)
 		$Tween.start()
-	# if health == 0: goto scene death
-	
+	if health == 0: 
+		get_tree().change_scene("res://Screens/Defeat_Screen/Defeat.tscn")
+		
 func _on_Area2D_body_entered(body):
 	body.track_player()

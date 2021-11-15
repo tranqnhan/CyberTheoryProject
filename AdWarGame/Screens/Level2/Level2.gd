@@ -1,9 +1,9 @@
-extends Node2D
+extends Node
+
+
 
 var is_level_ended = false
-var pathWin = "res://Screens/Victory/Victory.tscn"
-
-
+var pathWin = "res://Screens/Next2_Level_Screen/Next_Level.tscn"
 func _process(delta):
 	if (!is_level_ended):
 		var enemies = get_tree().get_nodes_in_group("Enemy")

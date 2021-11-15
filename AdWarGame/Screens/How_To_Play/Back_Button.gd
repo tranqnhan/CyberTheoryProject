@@ -4,6 +4,7 @@ extends Button
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+var stri = "res://Screens/Menu/Menu.tscn"
 #var current_font = load("AsGodot-Fontpack/fonts/poco/poco.ttf")
 #var unused_font = load("AsGodot-Fontpack/fonts/poco/poco.ttf")
 
@@ -20,6 +21,7 @@ func _ready():
 
 func _button_pressed():
 	print("Back To Menu Button Pressed")
+	get_tree().change_scene(stri)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

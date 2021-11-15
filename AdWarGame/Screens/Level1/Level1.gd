@@ -1,7 +1,8 @@
-extends Node2D
+extends Node
+
 
 var is_level_ended = false
-var pathWin = "res://Screens/Victory/Victory.tscn"
+var pathWin = "res://Screens/Next_Level_Screen/Next_Level.tscn"
 
 
 func _process(delta):
@@ -10,3 +11,4 @@ func _process(delta):
 		if (enemies.size() == 0):
 			is_level_ended = true
 			get_tree().change_scene(pathWin)
+

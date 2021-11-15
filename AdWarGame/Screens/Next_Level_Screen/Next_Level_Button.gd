@@ -4,7 +4,7 @@ extends Button
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-
+var stri = "res://Screens/credits/credits.tscn"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -12,7 +12,7 @@ func _ready():
 
 
 func _button_pressed():
-	print("Next Level Button Pressed")
+	get_tree().change_scene(stri)
 
 
 
