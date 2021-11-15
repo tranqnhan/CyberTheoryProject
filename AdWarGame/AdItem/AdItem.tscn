@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Assets/characters/day2images/enemyad.png" type="Texture" id=1]
+[ext_resource path="res://Assets/characters/day3/ad3.png" type="Texture" id=1]
 [ext_resource path="res://AdItem/AdItem.gd" type="Script" id=2]
 
 [node name="AdItem" type="Control"]
@@ -19,8 +19,8 @@ __meta__ = {
 
 [node name="Button" type="Button" parent="."]
 margin_left = 951.0
-margin_top = 6.0
-margin_right = 1011.0
+margin_top = 4.0
+margin_right = 1015.0
 margin_bottom = 66.0
 rect_min_size = Vector2( 60, 60 )
 flat = true

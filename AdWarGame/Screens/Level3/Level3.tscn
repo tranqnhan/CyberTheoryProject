@@ -29,17 +29,29 @@ tile_data = PoolIntArray( -2228224, 536870960, 0, -2228223, 536870938, 0, -22282
 position = Vector2( 162, 525 )
 
 [node name="RifleEnemy" parent="." instance=ExtResource( 2 )]
-position = Vector2( 240, -214 )
+position = Vector2( 181, -159 )
 
 [node name="ShotgunEnemy" parent="." instance=ExtResource( 5 )]
 position = Vector2( 427, -498 )
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="HUD" parent="CanvasLayer" instance=ExtResource( 4 )]
 
 [node name="BossEnemy" parent="." instance=ExtResource( 8 )]
 position = Vector2( 517, -1938 )
 
 [node name="SMGEnemy" parent="." instance=ExtResource( 6 )]
 position = Vector2( 167, -1181 )
+
+[node name="RifleEnemy2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 876, 482 )
+
+[node name="RifleEnemy3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 546, 159 )
+
+[node name="ShotgunEnemy2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 546, -791 )
+
+[node name="SMGEnemy2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 868, -139 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource( 4 )]

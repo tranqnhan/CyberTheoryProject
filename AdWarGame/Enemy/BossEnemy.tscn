@@ -30,3 +30,5 @@ shape = SubResource( 1 )
 stream = ExtResource( 3 )
 volume_db = 24.0
 autoplay = true
+
+
